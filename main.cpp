@@ -90,11 +90,67 @@ void DrawColourfulRectangles(const unsigned width, const unsigned height, const 
 				image[row * width + col].y << " " <<
 				image[row * width + col].z << '\t';
 		}
-
 		outputFile << '\n';
 	}
 }
 
+void DrawCircle(const unsigned width, const unsigned height, const unsigned maxColourComponent,
+	const ColourRGB& innerCircleColour, const std::string& outputFilePath)
+{
+	assert(width % NUMBER_OF_RECTANGLES_ON_ROW == 0);
+	assert(height % NUMBER_OF_RECTANGLES_ON_COL == 0);
+
+	const unsigned rectangleXLength = width / NUMBER_OF_RECTANGLES_ON_ROW;
+	const unsigned rectangleYLength = height / NUMBER_OF_RECTANGLES_ON_COL;
+
+	std::vector<ColourRGB> colours = { innerCircleColour };
+
+	for (size_t currentColour = 0; currentColour < 1; ++currentColour)
+	{
+		std::vector<unsigned> currentColourValues = GenerateRandomVector(3, 0, maxColourComponent);
+		colours.push_back(ColourRGB{ currentColourValues[0], currentColourValues[1], currentColourValues[2] });
+	}
+
+	std::ofstream outputFile(outputFilePath);
+
+	outputFile << "P3" << '\n';
+	outputFile << width << " " << height << '\n';
+	outputFile << maxColourComponent << '\n';
+
+	std::vector<ColourRGB> image;
+
+	// insert magical offset that looks centre-ish
+	const size_t centerX = width / 2;
+	const size_t centerY = height / 2;
+	const size_t radius = 2 * std::floor(std::sqrt(width + height));
+
+	for (size_t row = 0; row < height; ++row)
+	{
+		for (size_t col = 0; col < width; ++col)
+		{
+			const size_t xDifference = col - centerX;
+			const size_t yDifference = row - centerY;
+
+			if (xDifference * xDifference + yDifference * yDifference <= radius * radius)
+			{
+				outputFile <<
+					colours[1].x << " " <<
+					colours[1].y << " " <<
+					colours[1].z << '\t';
+			}
+
+			else
+			{
+				outputFile <<
+					colours[0].x << " " <<
+					colours[0].y << " " <<
+					colours[0].z << '\t';
+			}
+		}
+
+		outputFile << '\n';
+	}
+}
 
 void PrintDifferentConvolutions()
 {
@@ -106,11 +162,17 @@ void PrintDifferentConvolutions()
 
 }
 
+void PrintFigures()
+{
+	DrawCircle(512, 128, 255, { 171, 171, 171 }, "./circle.ppm");
+}
+
 int main()
 {
 	std::srand(time(NULL));
 
 	PrintDifferentConvolutions();
+	PrintFigures();
 
 	return 0;
 }

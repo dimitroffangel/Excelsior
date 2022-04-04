@@ -1,9 +1,18 @@
-#pragma once
+#ifndef EXCELSIOR_COLOURRGB_H
+#define EXCELSIOR_COLOURRGB_H
 
-struct ColourRGB
+#include "./Core.h"
+
+namespace Excelsior
 {
-	unsigned x;
-	unsigned y;
-	unsigned z;
-};
+	using ColourRGB = Vector3;
 
+	//struct ColourRGB
+	//{
+	//	unsigned x;
+	//	unsigned y;
+	//	unsigned z;
+	//};
+}
+
+#endif

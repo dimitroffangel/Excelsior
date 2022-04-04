@@ -4,9 +4,16 @@
 #include <algorithm>
 
 #include "DrawColouredRectangles.h"
+#include "Core.h"
+#include "ColourRGB.h"
+#include "ImageData.h"
+#include "Ray.h"
+
 #include <cassert>
 
+
 using namespace Convolution;
+using namespace Excelsior;
 
 const unsigned NUMBER_OF_RECTANGLES_ON_ROW = 32;
 const unsigned NUMBER_OF_RECTANGLES_ON_COL = 32;
@@ -37,7 +44,13 @@ void DrawColourfulRectangles(const unsigned width, const unsigned height, const 
 	for (size_t currentColour = 0; currentColour < NUMBER_OF_RECTANGLES_ON_COL * NUMBER_OF_RECTANGLES_ON_ROW; ++currentColour)
 	{
 		std::vector<unsigned> currentColourValues = GenerateRandomVector(3, 0, maxColourComponent);
-		colours.push_back(ColourRGB{ currentColourValues[0], currentColourValues[1], currentColourValues[2] });
+		colours.push_back(
+			ColourRGB{ 
+				static_cast<Real>(currentColourValues[0]), 
+				static_cast<Real>(currentColourValues[1]), 
+				static_cast<Real>(currentColourValues[2]) 
+			}
+		);
 	}
 
 	std::ofstream outputFile(outputFilePath);
@@ -75,20 +88,20 @@ void DrawColourfulRectangles(const unsigned width, const unsigned height, const 
 					const size_t imageX = (col - convolutionMatrix[0].size() / 2 + filterX + width) % width;
 					const size_t imageY = (row - convolutionMatrix.size() / 2 + filterY + height) % height;
 
-					redIntensity += image[imageY * width + imageX].x * convolutionMatrix[filterY][filterX];
-					greenIntensity += image[imageY * width + imageX].y * convolutionMatrix[filterY][filterX];
-					blueIntensity += image[imageY * width + imageX].z * convolutionMatrix[filterY][filterX];
+					redIntensity += image[imageY * width + imageX].m_X * convolutionMatrix[filterY][filterX];
+					greenIntensity += image[imageY * width + imageX].m_Y * convolutionMatrix[filterY][filterX];
+					blueIntensity += image[imageY * width + imageX].m_Z * convolutionMatrix[filterY][filterX];
 				}
 			}
 
-			image[row * width + col].x = std::min(std::max(static_cast<int>(factorConvolution * redIntensity + biasConvolution), 0), 255);
-			image[row * width + col].y = std::min(std::max(static_cast<int>(factorConvolution * greenIntensity + biasConvolution), 0), 255);
-			image[row * width + col].z = std::min(std::max(static_cast<int>(factorConvolution * blueIntensity + biasConvolution), 0), 255);
+			image[row * width + col].m_X = std::min(std::max(static_cast<int>(factorConvolution * redIntensity + biasConvolution), 0), 255);
+			image[row * width + col].m_Y = std::min(std::max(static_cast<int>(factorConvolution * greenIntensity + biasConvolution), 0), 255);
+			image[row * width + col].m_Z = std::min(std::max(static_cast<int>(factorConvolution * blueIntensity + biasConvolution), 0), 255);
 
 			outputFile <<
-				image[row * width + col].x << " " <<
-				image[row * width + col].y << " " <<
-				image[row * width + col].z << '\t';
+				image[row * width + col].m_X << " " <<
+				image[row * width + col].m_Y << " " <<
+				image[row * width + col].m_Z << '\t';
 		}
 		outputFile << '\n';
 	}
@@ -108,7 +121,13 @@ void DrawCircle(const unsigned width, const unsigned height, const unsigned maxC
 	for (size_t currentColour = 0; currentColour < 1; ++currentColour)
 	{
 		std::vector<unsigned> currentColourValues = GenerateRandomVector(3, 0, maxColourComponent);
-		colours.push_back(ColourRGB{ currentColourValues[0], currentColourValues[1], currentColourValues[2] });
+		colours.push_back(
+			ColourRGB{
+				static_cast<Real>(currentColourValues[0]),
+				static_cast<Real>(currentColourValues[1]),
+				static_cast<Real>(currentColourValues[2])
+			}
+		);
 	}
 
 	std::ofstream outputFile(outputFilePath);
@@ -134,17 +153,17 @@ void DrawCircle(const unsigned width, const unsigned height, const unsigned maxC
 			if (xDifference * xDifference + yDifference * yDifference <= radius * radius)
 			{
 				outputFile <<
-					colours[1].x << " " <<
-					colours[1].y << " " <<
-					colours[1].z << '\t';
+					colours[1].m_X << " " <<
+					colours[1].m_Y << " " <<
+					colours[1].m_Z << '\t';
 			}
 
 			else
 			{
 				outputFile <<
-					colours[0].x << " " <<
-					colours[0].y << " " <<
-					colours[0].z << '\t';
+					colours[0].m_X << " " <<
+					colours[0].m_Y << " " <<
+					colours[0].m_Z << '\t';
 			}
 		}
 
@@ -167,12 +186,59 @@ void PrintFigures()
 	DrawCircle(512, 128, 255, { 171, 171, 171 }, "./circle.ppm");
 }
 
+void FireRays(const std::string& outputFilePath)
+{
+	std::ofstream outputFile(outputFilePath);
+
+	outputFile << "P3" << '\n';
+	outputFile << IMAGE_WIDTH << " " << IMAGE_HEIGHT << '\n';
+	outputFile << 255 << '\n';
+
+	std::vector<ColourRGB> image;
+
+
+	for (size_t row = 0; row < IMAGE_HEIGHT; ++row)
+	{
+		for (size_t col = 0; col < IMAGE_WIDTH; ++col)
+		{
+			Real u = col + 0.5;
+			Real v = row + 0.5;
+
+			u /= IMAGE_WIDTH;
+			v /= IMAGE_HEIGHT;
+
+			u = (2.0 * u) - 1.0;
+			v = 1.0 - (2.0 * v);
+
+			u *= static_cast<Real>(IMAGE_WIDTH / IMAGE_HEIGHT);
+
+			//const Real u = Real(col) / (IMAGE_WIDTH - 1);
+			//const Real v = Real(row) / (IMAGE_HEIGHT - 1);
+
+			//const Ray ray(ORIGIN, LOWER_LEFT_CORNER + u * HORIZONTAL - v * VERTICAL - ORIGIN);
+			
+			const Ray ray(ORIGIN, Vector3(u, v, -1));
+
+			const ColourRGB pixelColour = GetRayColour(ray);
+
+			outputFile <<
+				static_cast<unsigned>(pixelColour.m_X * 255) << " " <<
+				static_cast<unsigned>(pixelColour.m_Y * 255) << " " <<
+				static_cast<unsigned>(pixelColour.m_Z * 255) << '\t';
+		}
+
+		outputFile << '\n';
+	}
+}
+
 int main()
 {
 	std::srand(time(NULL));
 
-	PrintDifferentConvolutions();
-	PrintFigures();
+	//PrintDifferentConvolutions();
+	//PrintFigures();
+
+	FireRays("./blendWhiteBlue_AspectRatio16_9.ppm");
 
 	return 0;
 }

@@ -39,7 +39,7 @@ namespace Excelsior
 			Vector3 m_Direction;
 	};
 
-	bool HasHitTriangle(const Triangle& triangle, const Ray& ray, const bool isSingleSided)
+	bool HasHitTriangle(const Triangle& triangle, const Ray& ray, Real& uShading, Real& vShading, const bool isSingleSided)
 	{
 		const Vector3 triangleNormal = triangle.GetNormal();
 
@@ -53,19 +53,20 @@ namespace Excelsior
 			return false;
 		}
 
-		//if (!IsVectorLookingTowardsTriangle(ray.GetOrigin(), triangle))
+		const Real triangleNormalSquaredMagnitude = triangleNormal.GetSquaredMagnitude();
+
+		//if (triangleNormal.ScalarProduct(triangle.m_Points[0]) >= 0)
 		//{
 		//	return false;
 		//}
 		
-		// WTF is t in :
+		// WTF is t in the ray that is intersecting the triangle's plane :
 		// |RayPoint = RayOrigin + t * RayDirection 
 		// |Ax + By + Cz + D = 0 <=>
 		// A*(RayPoint.X) + B*(RayPoint.Y) + C*(RayPoint.Z) + D = 0 <=>
 		// A*(RayOrigin.X + t * RayDirection.X) + B*(RayOrigin.Y + t * RayDirection.Y) + ... + D = 0 <=>
 		// ScalarProduct(triangleNormal, RayOrigin) + t * ScalarProduct(triangleNormal, RayDirection) + D = 0 <=>
 		// t = -[ScalarProduct(triangleNormal, RayOrigin) + D] / (ScalarProduct(triangleNormal, RayDirection)
-
 
 		const Real planeD = -(triangleNormal.ScalarProduct(triangle.m_Points[0]));
 
@@ -77,6 +78,8 @@ namespace Excelsior
 		}
 
 		const Vector3 rayResult = ray.ResultAt(t);
+		std::vector<Real> scalarTripleProductsResults;
+		scalarTripleProductsResults.reserve(3);
 
 		for (int i = 0; i < 3; ++i)
 		{
@@ -84,11 +87,17 @@ namespace Excelsior
 
 			const Vector3 CI = rayResult - triangle.m_Points[i];
 
-			if (triangleNormal.ScalarProduct(edge.VectorProduct(CI)) <= 0)
+			scalarTripleProductsResults.push_back(triangleNormal.ScalarProduct(edge.VectorProduct(CI)));
+
+			if (scalarTripleProductsResults[i] < 0)
 			{
 				return false;
 			}
+
 		}
+
+		uShading = scalarTripleProductsResults[1] / triangleNormalSquaredMagnitude;
+		vShading = scalarTripleProductsResults[2] / triangleNormalSquaredMagnitude;
 
 		return true;
 	}
@@ -97,9 +106,12 @@ namespace Excelsior
 	{
 		Triangle foo = Triangle(Vector3(-1.75, -1.75, -3), Vector3(1.75, -1.75, -3), Vector3(0, 1.75, -3));
 
-		if (HasHitTriangle(foo, ray, isSingleSided))
+		Real uTriangleShading = 0.0;
+		Real vTriangleShading = 0.0;
+
+		if (HasHitTriangle(foo, ray, uTriangleShading, vTriangleShading, isSingleSided))
 		{
-			return ColourRGB(1, 0, 0);
+			return ColourRGB(uTriangleShading, vTriangleShading, 1- uTriangleShading - vTriangleShading);
 		}
 
 		const Vector3 unitDirection = ray.GetDirection().GetNormalize();

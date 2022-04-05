@@ -17,13 +17,12 @@ namespace Excelsior
 			m_Points = { A,B,C };
 		}
 
-
 		Vector3 GetNormal() const
 		{
 			const Vector3 firstSide = m_Points[1] - m_Points[0];
 			const Vector3 secondSide = m_Points[2] - m_Points[0];
 
-			return firstSide.VectorProduct(secondSide).GetNormalize();
+			return firstSide.VectorProduct(secondSide);
 		}
 
 
@@ -34,7 +33,7 @@ namespace Excelsior
 
 	bool IsVectorLookingTowardsTriangle(const Vector3& vector, const Triangle& triangle)
 	{
-		return vector.ScalarProduct(triangle.m_Points[0]) > 0;
+		return vector.ScalarProduct(triangle.m_Points[0]) < 0;
 	}
 
 	Plane GetPlaneFromTriangle(const Triangle& triangle)

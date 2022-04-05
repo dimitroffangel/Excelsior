@@ -4,6 +4,8 @@
 #include "./Core.h"
 #include "./ColourRGB.h"
 
+#include "Triangle.h"
+
 namespace Excelsior
 {
 	class Ray
@@ -36,6 +38,21 @@ namespace Excelsior
 			Vector3 m_Origin;
 			Vector3 m_Direction;
 	};
+
+	bool HasHitTriangle(const Triangle& triangle, const Ray& ray)
+	{
+		if (triangle.GetNormal().ScalarProduct(ray.GetDirection()) == 0)
+		{
+			return false;
+		}
+
+		if (!IsVectorLookingTowardsTriangle(ray.GetOrigin(), triangle))
+		{
+			return false;
+		}
+
+		return false;
+	}
 
 	ColourRGB GetRayColour(const Ray& ray)
 	{

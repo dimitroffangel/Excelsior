@@ -39,9 +39,14 @@ namespace Excelsior
 			Vector3 m_Direction;
 	};
 
-	bool HasHitTriangle(const Triangle& triangle, const Ray& ray)
+	bool HasHitTriangle(const Triangle& triangle, const Ray& ray, const bool isSingleSided)
 	{
 		const Vector3 triangleNormal = triangle.GetNormal();
+
+		if (isSingleSided && triangleNormal.ScalarProduct(ray.GetDirection()))
+		{
+			return false;
+		}
 
 		if (triangleNormal.ScalarProduct(ray.GetDirection()) == 0)
 		{
@@ -88,11 +93,11 @@ namespace Excelsior
 		return true;
 	}
 
-	ColourRGB GetRayColour(const Ray& ray)
+	ColourRGB GetRayColour(const Ray& ray, const bool isSingleSided)
 	{
 		Triangle foo = Triangle(Vector3(-1.75, -1.75, -3), Vector3(1.75, -1.75, -3), Vector3(0, 1.75, -3));
 
-		if (HasHitTriangle(foo, ray))
+		if (HasHitTriangle(foo, ray, isSingleSided))
 		{
 			return ColourRGB(1, 0, 0);
 		}

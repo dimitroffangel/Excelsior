@@ -17,6 +17,7 @@ using namespace Excelsior;
 
 const unsigned NUMBER_OF_RECTANGLES_ON_ROW = 32;
 const unsigned NUMBER_OF_RECTANGLES_ON_COL = 32;
+const bool IS_SIGNLE_SIDED = false;
 
 std::vector<unsigned> GenerateRandomVector(const size_t size, const size_t fromInterval, const size_t toInterval)
 {
@@ -219,7 +220,7 @@ void FireRays(const std::string& outputFilePath)
 			
 			const Ray ray(ORIGIN, Vector3(u, v, -1));
 
-			const ColourRGB pixelColour = GetRayColour(ray);
+			const ColourRGB pixelColour = GetRayColour(ray, IS_SIGNLE_SIDED);
 
 			outputFile <<
 				static_cast<unsigned>(pixelColour.m_X * 255) << " " <<

@@ -146,8 +146,10 @@
     <ClInclude Include="ColourRGB.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="ImageData.h" />
+    <ClInclude Include="Plane.h" />
     <ClInclude Include="Precision.h" />
     <ClInclude Include="Ray.h" />
+    <ClInclude Include="Triangle.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

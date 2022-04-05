@@ -3,6 +3,7 @@
 
 #include "./Core.h"
 #include "./ColourRGB.h"
+#include "./Plane.h"
 
 #include <vector>
 
@@ -33,7 +34,19 @@ namespace Excelsior
 
 	bool IsVectorLookingTowardsTriangle(const Vector3& vector, const Triangle& triangle)
 	{
-		return vector.ScalarProduct(triangle.m_Points[0]) < 0;
+		return vector.ScalarProduct(triangle.m_Points[0]) > 0;
+	}
+
+	Plane GetPlaneFromTriangle(const Triangle& triangle)
+	{
+		/*
+			Plane Equation: Ax + By + Cz + D = 0 <=>
+			D = -(Ax + By + Cz)
+		*/ 
+
+		const Vector3 triangleNormal = triangle.GetNormal();
+		const Real planeD = -(triangleNormal.ScalarProduct(triangle.m_Points[0]));
+		return Plane(triangleNormal.m_X, triangleNormal.m_Y, triangleNormal.m_Z, planeD);
 	}
 }
 

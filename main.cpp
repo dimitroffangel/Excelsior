@@ -239,7 +239,7 @@ int main()
 	//PrintDifferentConvolutions();
 	//PrintFigures();
 
-	FireRays("./blendWhiteBlue_AspectRatio16_9.ppm");
+	FireRays("./two_triangles.ppm");
 
 	return 0;
 }

@@ -39,6 +39,41 @@ namespace Excelsior
 			Vector3 m_Direction;
 	};
 
+	bool HasHitTriangle_Moller_Trumbore(const Triangle& triangle, const Ray& ray, Real& uShading, Real& vShading, Real& t, const bool isSingleSided)
+	{
+		const Vector3 AB = triangle.m_Points[1] - triangle.m_Points[0];
+		const Vector3 AC = triangle.m_Points[2] - triangle.m_Points[0];
+
+		const Vector3 crossProductRayDirectionAC = ray.GetDirection().VectorProduct(AC);
+		const Real determinant = crossProductRayDirectionAC.ScalarProduct(AB);
+
+		// the ray is hitting from behind the triangle
+		if (determinant < 0.0001 && determinant > -0.0001)
+		{
+			return false;
+		}
+
+		const Real inversedDeterminant = 1 / determinant;
+		const Vector3 AOrigin = ray.GetOrigin() - triangle.m_Points[0];
+		uShading = AOrigin.ScalarProduct(crossProductRayDirectionAC) * inversedDeterminant;
+
+		if (uShading < 0 || uShading > 1)
+		{
+			return false;
+		}
+
+		const Vector3 crossProductAOrigin= AOrigin.VectorProduct(AB);
+		vShading = ray.GetDirection().ScalarProduct(crossProductAOrigin) * inversedDeterminant;
+		if (vShading < 0 || uShading + vShading > 1)
+		{
+			return false;
+		}
+
+		t = crossProductAOrigin.ScalarProduct(AB) * inversedDeterminant;
+
+		return true;
+	}
+
 	bool HasHitTriangle(const Triangle& triangle, const Ray& ray, Real& uShading, Real& vShading, const bool isSingleSided)
 	{
 		const Vector3 triangleNormal = triangle.GetNormal();
@@ -93,7 +128,6 @@ namespace Excelsior
 			{
 				return false;
 			}
-
 		}
 
 		uShading = scalarTripleProductsResults[1] / triangleNormalSquaredMagnitude;
@@ -105,14 +139,28 @@ namespace Excelsior
 	ColourRGB GetRayColour(const Ray& ray, const bool isSingleSided)
 	{
 		Triangle foo = Triangle(Vector3(-1.75, -1.75, -3), Vector3(1.75, -1.75, -3), Vector3(0, 1.75, -3));
+		Triangle foo2 = Triangle(Vector3(0, 0, -1), Vector3(1, 0, -3), Vector3(0, 1, -3));
 
 		Real uTriangleShading = 0.0;
 		Real vTriangleShading = 0.0;
+		Real tTriangleShading = 0.0;
+		Vector3 cols[3] = { {0.6, 0.4, 0.1}, {0.1, 0.5, 0.3}, {0.1, 0.3, 0.7} };
 
-		if (HasHitTriangle(foo, ray, uTriangleShading, vTriangleShading, isSingleSided))
+		if (HasHitTriangle_Moller_Trumbore(foo, ray, uTriangleShading, vTriangleShading, tTriangleShading, isSingleSided))
 		{
-			return ColourRGB(uTriangleShading, vTriangleShading, 1- uTriangleShading - vTriangleShading);
+			return uTriangleShading * cols[0] + vTriangleShading * cols[1] + (1 - uTriangleShading - vTriangleShading) * cols[2];
+			//return ColourRGB(uTriangleShading, vTriangleShading, 1- uTriangleShading - vTriangleShading);
 		}
+
+		//if (HasHitTriangle(foo, ray, uTriangleShading, vTriangleShading, isSingleSided))
+		//{
+		//	return ColourRGB(uTriangleShading, vTriangleShading, 1- uTriangleShading - vTriangleShading);
+		//}
+
+		//if (HasHitTriangle(foo2, ray, uTriangleShading, vTriangleShading, isSingleSided))
+		//{
+		//	return ColourRGB(1, 0, 0);
+		//}
 
 		const Vector3 unitDirection = ray.GetDirection().GetNormalize();
 		const float t = 0.5 * (unitDirection.m_Y + unitDirection.m_X + 1.0);

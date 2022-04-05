@@ -31,7 +31,7 @@ std::vector<unsigned> GenerateRandomVector(const size_t size, const size_t fromI
 
 void DrawColourfulRectangles(const unsigned width, const unsigned height, const unsigned maxColourComponent, 
 	const double factorConvolution, const double biasConvolution,
-	const std::vector<std::vector<double>> convolutionMatrix, const std::string& outputFilePath)
+	const std::vector<std::vector<double>>& convolutionMatrix, const std::string& outputFilePath)
 {
 	assert(width % NUMBER_OF_RECTANGLES_ON_ROW == 0);
 	assert(height % NUMBER_OF_RECTANGLES_ON_COL == 0);

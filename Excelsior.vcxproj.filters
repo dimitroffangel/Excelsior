@@ -21,6 +21,12 @@
     <ClCompile Include="DrawColouredRectangles.h">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Figure.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Core.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ColourRGB.h">
@@ -42,6 +48,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Plane.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Figure.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

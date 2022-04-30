@@ -139,12 +139,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Core.cpp" />
     <ClCompile Include="DrawColouredRectangles.h" />
+    <ClCompile Include="Figure.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ColourRGB.h" />
     <ClInclude Include="Core.h" />
+    <ClInclude Include="Figure.h" />
     <ClInclude Include="ImageData.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Precision.h" />

@@ -8,6 +8,8 @@
 #include "ColourRGB.h"
 #include "ImageData.h"
 #include "Ray.h"
+#include "Figure.h"
+#include "Triangle.h"
 
 #include <cassert>
 
@@ -197,6 +199,16 @@ void FireRays(const std::string& outputFilePath)
 
 	std::vector<ColourRGB> image;
 
+	std::vector<std::shared_ptr<Figure>> figures;
+	Vector3 a(-1.75, -1.75, -3);
+	Vector3 b(1.75, -1.75, -3);
+	Vector3 c(0, -1.75, -6);
+	Vector3 d(0, 1.75, -3);
+	std::shared_ptr<Triangle> pyramidGround = std::make_shared<Triangle>(a, b, c);
+	std::shared_ptr<Triangle> wall1 = std::make_shared<Triangle>(a, b, d);
+	std::shared_ptr<Triangle> wall2 = std::make_shared<Triangle>(c, a, d);
+	std::shared_ptr<Triangle> wall3 = std::make_shared<Triangle>(b, c, d);
+	figures = { pyramidGround, wall1, wall2, wall3};
 
 	for (size_t row = 0; row < IMAGE_HEIGHT; ++row)
 	{
@@ -213,14 +225,20 @@ void FireRays(const std::string& outputFilePath)
 
 			u *= static_cast<Real>(IMAGE_WIDTH / IMAGE_HEIGHT);
 
-			//const Real u = Real(col) / (IMAGE_WIDTH - 1);
-			//const Real v = Real(row) / (IMAGE_HEIGHT - 1);
-
-			//const Ray ray(ORIGIN, LOWER_LEFT_CORNER + u * HORIZONTAL - v * VERTICAL - ORIGIN);
-			
 			const Ray ray(ORIGIN, Vector3(u, v, -1));
 
-			const ColourRGB pixelColour = GetRayColour(ray, IS_SIGNLE_SIDED);
+			const Vector3 unitDirection = ray.GetDirection().GetNormalize();
+			const float t = 0.5 * (unitDirection.m_Y + unitDirection.m_X + 1.0);
+			ColourRGB pixelColour = (1.0 - t) * ColourRGB(1, 1, 1) + t * ColourRGB(0.5, 0.7, 1.0);
+
+			for (const std::shared_ptr<Figure>& figure : figures)
+			{
+				ColourRGB colourIfRayHit;
+				if (figure->TryGettingColour(ray, colourIfRayHit, false))
+				{
+					pixelColour = colourIfRayHit;
+				}
+			}
 
 			outputFile <<
 				static_cast<unsigned>(pixelColour.m_X * 255) << " " <<
@@ -239,7 +257,7 @@ int main()
 	//PrintDifferentConvolutions();
 	//PrintFigures();
 
-	FireRays("./two_triangles.ppm");
+	FireRays("./pyramid.ppm");
 
 	return 0;
 }

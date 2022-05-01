@@ -145,6 +145,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Matrix.cpp" />
     <ClCompile Include="RayHelper.cpp" />
+    <ClCompile Include="Test_CameraMovement.cpp" />
     <ClCompile Include="Test_Rotations.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -158,6 +159,7 @@
     <ClInclude Include="Precision.h" />
     <ClInclude Include="Ray.h" />
     <ClInclude Include="RayHelper.h" />
+    <ClInclude Include="Test_CameraMovement.h" />
     <ClInclude Include="Test_Rotations.h" />
     <ClInclude Include="Triangle.h" />
   </ItemGroup>

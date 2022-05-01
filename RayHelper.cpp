@@ -10,7 +10,8 @@
 #include <iostream>
 #include <vector>
 
-void Excelsior::RayHelper::FireRays(const std::string& outputFilePath, const CameraRotationType cameraRotationType, const int rotationSpeed, const int numberOfFrames)
+void Excelsior::RayHelper::FireRays(const std::string& outputFilePath, 
+	const CameraMovementType cameraMovementType, const CameraRotationType cameraRotationType, const Real cameraSpeed, const int rotationSpeed, const int numberOfFrames)
 {
 	std::ofstream outputFile(outputFilePath);
 
@@ -55,6 +56,21 @@ void Excelsior::RayHelper::FireRays(const std::string& outputFilePath, const Cam
 			break;
 		default:
 			break;
+	};
+
+	switch (cameraMovementType)
+	{
+	case CameraMovementType::Dolly:
+		camera.MakeDollyMove(cameraSpeed);
+		break;
+	case CameraMovementType::Truck:
+		camera.MakeTruckMove(cameraSpeed);
+		break;
+	case CameraMovementType::Pedestal:
+		camera.MakePedestalMove(cameraSpeed);
+		break;
+	default:
+		break;
 	};
 
 	for (size_t row = 0; row < IMAGE_HEIGHT; ++row)

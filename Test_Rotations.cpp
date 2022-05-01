@@ -14,7 +14,7 @@ void Excelsior::Test_Rotations::TestRollRotation()
 
 	for (size_t i = 0; i < numberOfFrames; ++i)
 	{
-		RayHelper::FireRays(fileName + std::to_string(i) + ".ppm", CameraRotationType::Roll, currentRotationSpeed, numberOfFrames);
+		RayHelper::FireRays(fileName + std::to_string(i) + ".ppm", CameraMovementType::None, CameraRotationType::Roll, 0, currentRotationSpeed, numberOfFrames);
 		currentRotationSpeed += 5;
 	}
 }
@@ -28,7 +28,7 @@ void Excelsior::Test_Rotations::TestPanRotation()
 
 	for (size_t i = 0; i < numberOfFrames; ++i)
 	{
-		RayHelper::FireRays(fileName + std::to_string(i) + ".ppm", CameraRotationType::Pan, currentRotationSpeed, numberOfFrames);
+		RayHelper::FireRays(fileName + std::to_string(i) + ".ppm", CameraMovementType::None,CameraRotationType::Pan, currentRotationSpeed, numberOfFrames);
 		currentRotationSpeed += 5;
 	}
 }
@@ -42,7 +42,7 @@ void Excelsior::Test_Rotations::TestTiltRotation()
 
 	for (size_t i = 0; i < numberOfFrames; ++i)
 	{
-		RayHelper::FireRays(fileName + std::to_string(i) + ".ppm", CameraRotationType::Tilt, currentRotationSpeed, numberOfFrames);
+		RayHelper::FireRays(fileName + std::to_string(i) + ".ppm", CameraMovementType::None, CameraRotationType::Tilt, currentRotationSpeed, numberOfFrames);
 		currentRotationSpeed += 5;
 	}
 }

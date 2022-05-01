@@ -15,6 +15,14 @@ namespace Excelsior
 		None
 	};
 
+	enum class CameraMovementType
+	{
+		Dolly,
+		Truck,
+		Pedestal,
+		None
+	};
+
 	class Camera
 	{
 	public:

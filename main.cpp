@@ -8,6 +8,7 @@
 #include "Core.h"
 #include "ColourRGB.h"
 #include "Test_Rotations.h"
+#include "Test_CameraMovement.h"
 
 #include <cassert>
 #include <thread>
@@ -194,9 +195,16 @@ int main()
 	//PrintDifferentConvolutions();
 	//PrintFigures();
 	
-	Test_Rotations::TestTiltRotation();
-	Test_Rotations::TestPanRotation();
-	Test_Rotations::TestTiltRotation();
+	//Test_Rotations::TestPanRotation();
+	//Test_Rotations::TestTiltRotation();
+
+
+	Test_CameraMovement::TestDollyRotation();
+	std::thread t2(Test_CameraMovement::TestTruckRotation);
+	std::thread t3(Test_CameraMovement::TestPedestalRotation);
+
+	t2.join();
+	t3.join();
 
 	return 0;
 }

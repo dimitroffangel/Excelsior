@@ -10,6 +10,7 @@
 #include "Ray.h"
 #include "Figure.h"
 #include "Triangle.h"
+#include "Camera.h"
 
 #include <cassert>
 
@@ -210,6 +211,8 @@ void FireRays(const std::string& outputFilePath)
 	std::shared_ptr<Triangle> wall3 = std::make_shared<Triangle>(b, c, d);
 	figures = { pyramidGround, wall1, wall2, wall3};
 
+	Camera camera(ORIGIN);
+	
 	for (size_t row = 0; row < IMAGE_HEIGHT; ++row)
 	{
 		for (size_t col = 0; col < IMAGE_WIDTH; ++col)
@@ -225,7 +228,7 @@ void FireRays(const std::string& outputFilePath)
 
 			u *= static_cast<Real>(IMAGE_WIDTH / IMAGE_HEIGHT);
 
-			const Ray ray(ORIGIN, Vector3(u, v, -1));
+			const Ray ray(camera.GetPosition(), Vector3(u, v, -1));
 
 			const Vector3 unitDirection = ray.GetDirection().GetNormalize();
 			const float t = 0.5 * (unitDirection.m_Y + unitDirection.m_X + 1.0);

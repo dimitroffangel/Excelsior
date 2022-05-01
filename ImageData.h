@@ -16,7 +16,7 @@ namespace Excelsior
 
 	const Real FOCAL_LENGTH = 1.0;
 	
-	const Vector3 ORIGIN = Vector3(0, 0, 0);
+	const Vector3 ORIGIN = Vector3(0, 1, 0);
 	const Vector3 HORIZONTAL = Vector3(VIEWPORT_WIDTH, 0, 0);
 	const Vector3 VERTICAL = Vector3(0, VIEWPORT_HEIGHT, 0);
 	const Vector3 LOWER_LEFT_CORNER = ORIGIN - HORIZONTAL / 2 + VERTICAL / 2 - Vector3(0, 0, FOCAL_LENGTH);

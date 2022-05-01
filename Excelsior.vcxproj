@@ -144,6 +144,8 @@
     <ClCompile Include="Figure.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Matrix.cpp" />
+    <ClCompile Include="RayHelper.cpp" />
+    <ClCompile Include="Test_Rotations.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -155,6 +157,8 @@
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Precision.h" />
     <ClInclude Include="Ray.h" />
+    <ClInclude Include="RayHelper.h" />
+    <ClInclude Include="Test_Rotations.h" />
     <ClInclude Include="Triangle.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

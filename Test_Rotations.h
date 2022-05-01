@@ -1,11 +1,14 @@
-#ifndef EXCELSIOR_CORE_H
-#define EXCELSIOR_CORE_H
+#ifndef EXCELSIOR_TESTROTATIONS_H
+#define EXCELSIOR_TESTROTATIONS_H
 
 
-class Test_Rotations
+namespace Excelsior
 {
-
-};
-
+	class Test_Rotations
+	{
+	public:
+		static void TestRollRotation();
+	};
+}
 #endif
 

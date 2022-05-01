@@ -32,6 +32,21 @@ namespace Excelsior
 			return vectorToRotate * m_RotationMatrix;
 		}
 
+		void MakeDollyMove(const float zMovement)
+		{
+			m_Position.m_Z += zMovement;
+		}
+
+		void MakeTruckMove(const float xMovement)
+		{
+			m_Position.m_X += xMovement;
+		}
+
+		void MakePedestalMove(const float yMovement)
+		{
+			m_Position.m_Y += yMovement;
+		}
+
 		void MakePanRotation(const float degreeOfRotation)
 		{
 			const float radionsOfRotations = degreeOfRotation * (PI / 180.0f);

@@ -29,6 +29,28 @@ namespace Excelsior
 			assert(matrix[0].size() == MATRIX_SIZE);
 		}
 
+		Matrix(const std::vector<Real> container)
+		{
+			assert(container.size() == MATRIX_SIZE * MATRIX_SIZE);
+			m_Matrix.reserve(MATRIX_SIZE);
+
+			for (size_t row = 0; row < MATRIX_SIZE; ++row)
+			{
+				m_Matrix.reserve(MATRIX_SIZE);
+				m_Matrix.push_back({});
+				for (size_t col = 0; col < MATRIX_SIZE; ++col)
+				{
+					m_Matrix[row].push_back(container[row * MATRIX_SIZE + col]);
+				}
+			}
+		}
+
+		Matrix(const Matrix& matrix)
+			: m_Matrix(matrix.m_Matrix.begin(), matrix.m_Matrix.end())
+		{
+
+		}
+
 		Matrix operator* (const Matrix& rhs)
 		{
 			// TODO:: Transpose the matrix first so that there are less cache misses ? 
@@ -42,7 +64,7 @@ namespace Excelsior
 				{
 					for (size_t multiplyingIndex = 0; multiplyingIndex < MATRIX_SIZE; ++multiplyingIndex)
 					{
-						result.m_Matrix[row][col] += m_Matrix[row][multiplyingIndex] * m_Matrix[multiplyingIndex][col];
+						result.m_Matrix[row][col] += m_Matrix[row][multiplyingIndex] * rhs.m_Matrix[multiplyingIndex][col];
 					}
 				}
 			}

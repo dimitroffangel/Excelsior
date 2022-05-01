@@ -24,6 +24,6 @@ Vector3 Excelsior::operator*(const Vector3& lhs, const Matrix& rhs)
 		}
 	}
 
-	Vector3 result = Vector3(resultedVectorCoordinates[0], resultedVectorCoordinates[1], resultedVectorCoordinates[2]);
+	const Vector3 result = Vector3(resultedVectorCoordinates[0], resultedVectorCoordinates[1], resultedVectorCoordinates[2]);
 	return result;
 }

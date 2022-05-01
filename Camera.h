@@ -7,6 +7,14 @@
 
 namespace Excelsior
 {
+	enum class CameraRotationType
+	{
+		Pan,
+		Tilt,
+		Roll,
+		None
+	};
+
 	class Camera
 	{
 	public:

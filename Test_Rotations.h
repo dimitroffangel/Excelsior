@@ -7,6 +7,8 @@ namespace Excelsior
 	class Test_Rotations
 	{
 	public:
+		static void TestPanRotation();
+		static void TestTiltRotation();
 		static void TestRollRotation();
 	};
 }

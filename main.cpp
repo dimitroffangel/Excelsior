@@ -10,6 +10,7 @@
 #include "Test_Rotations.h"
 
 #include <cassert>
+#include <thread>
 
 using namespace Convolution;
 using namespace Excelsior;
@@ -193,7 +194,9 @@ int main()
 	//PrintDifferentConvolutions();
 	//PrintFigures();
 	
-	Test_Rotations::TestRollRotation();
+	Test_Rotations::TestTiltRotation();
+	Test_Rotations::TestPanRotation();
+	Test_Rotations::TestTiltRotation();
 
 	return 0;
 }

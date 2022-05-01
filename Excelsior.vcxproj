@@ -143,6 +143,7 @@
     <ClCompile Include="DrawColouredRectangles.h" />
     <ClCompile Include="Figure.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Matrix.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
@@ -150,6 +151,7 @@
     <ClInclude Include="Core.h" />
     <ClInclude Include="Figure.h" />
     <ClInclude Include="ImageData.h" />
+    <ClInclude Include="Matrix.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Precision.h" />
     <ClInclude Include="Ray.h" />
